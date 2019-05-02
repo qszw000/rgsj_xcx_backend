@@ -29,4 +29,14 @@ public class GlobalExceptionHandler {
         result.put("data", null);
         return result;
     }
+
+    @ExceptionHandler(CodeErrorException.class)
+    private Map<String, Object> codeErrorExceptionHandle() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", false);
+        result.put("code", -1005);
+        result.put("errMsg", "code无效");
+        result.put("data", null);
+        return result;
+    }
 }

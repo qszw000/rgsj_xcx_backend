@@ -3,7 +3,7 @@
 <mapper namespace="cn.hsy.echo.dao.UserDao" >
 
     <select id="getStudent" parameterType="String" resultMap="StudentInformationMap">
-        SELECT student.id, name, student_id, is_leader, zone, building, room
+        SELECT student.id, name, student_id, telephone, is_leader, zone, building, room
         FROM student, dormitory, accommendation
         WHERE student.open_id=#{openId} AND student.id=accommendation.s_id AND accommendation.d_id=dormitory.id;
     </select>
@@ -11,6 +11,7 @@
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="studentId" column="student_id"/>
+        <result property="telephone" column="telephone"/>
         <result property="isLeader" column="is_leader"/>
         <association property="dormitory" javaType="cn.hsy.echo.pojo.Dormitory">
             <result property="zone" column="zone"/>

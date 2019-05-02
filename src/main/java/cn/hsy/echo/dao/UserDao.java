@@ -18,7 +18,7 @@ public interface UserDao {
     @Select("SELECT open_id FROM student WHERE student_id=#{studentId}")
     public String getOpenId(@Param("studentId")int studentId);
 
-    // 通过openId找到学生的详细信息
+    // 判断学号在不在
     @Select("SELECT 1 FROM student WHERE student_id=#{studentId}")
     public Integer hasExistStudentId(@Param("studentId") int studentId);
 
@@ -63,14 +63,14 @@ public interface UserDao {
     // 获取维修列表
     @Select("SELECT repair.id, name, content, time, repair.telephone, picture, status " +
             "FROM student, repair " +
-            "WHERE repair.s_id=#{id} " +
+            "WHERE repair.s_id=#{id} and repair.s_id=student.id " +
             "ORDER BY time DESC")
     public List<Repair> listRepair(@Param("id") int id);
 
     //获取投诉列表
     @Select("SELECT complaint.id, name, content, time, complaint.telephone, picture, status " +
             "FROM student, complaint " +
-            "WHERE complaint.s_id=#{id} " +
+            "WHERE complaint.s_id=#{id} and complaint.s_id=student.id " +
             "ORDER BY time DESC")
     public List<Complaint> listComplaint(@Param("id") int id);
 

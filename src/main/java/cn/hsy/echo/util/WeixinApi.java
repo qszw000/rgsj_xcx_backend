@@ -1,6 +1,7 @@
 package cn.hsy.echo.util;
 
 
+import cn.hsy.echo.exception.CodeErrorException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
@@ -19,13 +20,14 @@ public class WeixinApi {
     private static final String APPSECRET = "bc97f9cd99ff0c623a33a6e1c7bd034a";
 
     public String getOpenId(String code) {
-//        System.out.println(code);
         StringBuffer url = new StringBuffer("https://api.weixin.qq.com/sns/jscode2session?appid=")
                 .append(APPID).append("&secret=").append(APPSECRET).append("&js_code=").append(code).append("&grant_type=authorization_code");
         String result = getResult(url.toString());
-//        System.out.println(result);
         JSONObject convertValue = (JSONObject) JSON.parse(result);
         String openId = (String) convertValue.get("openid");
+        if (openId == null) {
+            throw new CodeErrorException();
+        }
         return openId;
     }
 

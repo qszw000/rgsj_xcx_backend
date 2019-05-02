@@ -1,6 +1,5 @@
 package cn.hsy.echo.controller;
 
-import cn.hsy.echo.pojo.Repair;
 import cn.hsy.echo.service.WechatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,12 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/api/xcx")
 public class WechatController {
-    @Autowired WechatService wechatService;
+    private final WechatService wechatService;
+
+    @Autowired
+    public WechatController(WechatService wechatService) {
+        this.wechatService = wechatService;
+    }
 
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody HashMap<String, Object> info) {

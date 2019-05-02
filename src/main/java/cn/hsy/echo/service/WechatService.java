@@ -11,23 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.Line;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
 public class WechatService {
-    @Autowired private UserDao userDao;
-    @Autowired private Token tokenBuild;
-    @Autowired private WeixinApi weixinApi;
+    private final UserDao userDao;
+    private final Token tokenBuild;
+    private final WeixinApi weixinApi;
+
+    @Autowired
+    public WechatService(UserDao userDao, Token tokenBuild, WeixinApi weixinApi) {
+        this.userDao = userDao;
+        this.tokenBuild = tokenBuild;
+        this.weixinApi = weixinApi;
+    }
 
     // 微信小程序登入，输入code获取用户唯一的open_id，通过open_id查找学生编号，如果返回为null，则需要绑定学号
     // 如果返回不为null，则返回学生信息
     public Map<String, Object> login(String code) {
         String openId = weixinApi.getOpenId(code);
-//        System.out.println(openId);
-
         Integer id = userDao.getSId(openId);
         String token = tokenBuild.createToken(openId);
         Map<String, Object> result;
@@ -52,7 +55,7 @@ public class WechatService {
         if(tokenBuild.varify(token)) {
             Integer flag = userDao.hasExistStudentId(studentId);
             if (flag == null) {
-                result = errerMap(-1004, "学号不存在");
+                result = errorMap(-1004, "学号不存在");
             } else {
                 String openId = userDao.getOpenId(studentId);
                 if(openId == null) {
@@ -62,7 +65,7 @@ public class WechatService {
                     Student student = userDao.getStudent(openId);
                     result = successMap(student);
                 } else {
-                    result = errerMap(-1003, "学号已被绑定过");
+                    result = errorMap(-1003, "学号已被绑定过");
                 }
             }
         } else {
@@ -188,8 +191,13 @@ public class WechatService {
         if (tokenBuild.varify(token)) {
             String openId = tokenBuild.getOpenId(token);
             Integer id = userDao.getSId(openId);
+            System.out.println(id);
             PageHelper.startPage(pageNum, pageSize);
             List<Repair> repairList = userDao.listRepair(id);
+            System.out.println("now:" + new Date());
+            for(Repair repair : repairList) {
+                System.out.println(repair.getTime());
+            }
             PageInfo<Repair> pageInfo = new PageInfo<>(repairList);
             Map<String, Object> data = new HashMap<>();
             data.put("page", pageInfo);
@@ -308,7 +316,7 @@ public class WechatService {
             String content = (String) info.get("content");
             String picture = null;
             MultipartFile file = (MultipartFile) info.get("file");
-            if(!file.isEmpty()) {
+            if(file != null && !file.isEmpty()) {
                 try {
                     file.transferTo(new File("/www/wwwroot/api.echo.ituoniao.net/images/" + file.getOriginalFilename()));
                 } catch (Exception e) {
@@ -333,7 +341,7 @@ public class WechatService {
         return result;
     }
 
-    private Map<String, Object> errerMap(int code, String errMsg) {
+    private Map<String, Object> errorMap(int code, String errMsg) {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
         result.put("code", code);
