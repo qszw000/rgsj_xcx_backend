@@ -17,14 +17,14 @@ import java.io.File;
 import java.util.*;
 
 @Service
-public class WechatService {
+public class WeChatService {
     private final UserDao userDao;
     private final Token tokenBuild;
     private final WeChatApi weChatApi;
     private final AccountValidatorUtil accountValidatorUtil;
 
     @Autowired
-    public WechatService(UserDao userDao, Token tokenBuild, WeChatApi weChatApi, AccountValidatorUtil accountValidatorUtil) {
+    public WeChatService(UserDao userDao, Token tokenBuild, WeChatApi weChatApi, AccountValidatorUtil accountValidatorUtil) {
         this.userDao = userDao;
         this.tokenBuild = tokenBuild;
         this.weChatApi = weChatApi;
@@ -35,6 +35,7 @@ public class WechatService {
     // 如果返回不为null，则返回学生信息
     public Map<String, Object> login(String code) {
         String openId = weChatApi.getOpenId(code);
+//        String openId = "oBPN75W0V9Ican6r4ebB_4VTr3GI";
         Integer id = userDao.getSId(openId);
         String token = tokenBuild.createToken(openId);
         Map<String, Object> result;
@@ -204,9 +205,9 @@ public class WechatService {
         if (tokenBuild.varify(token)) {
             String openId = tokenBuild.getOpenId(token);
             Integer id = userDao.getSId(openId);
-            System.out.println(id);
+            Integer dId = userDao.getDid(id);
             PageHelper.startPage(pageNum, pageSize);
-            List<Repair> repairList = userDao.listRepair(id);
+            List<Repair> repairList = userDao.listRepair(dId);
             System.out.println("now:" + new Date());
             for(Repair repair : repairList) {
                 System.out.println(repair.getTime());

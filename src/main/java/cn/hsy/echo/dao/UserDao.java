@@ -60,10 +60,17 @@ public interface UserDao {
             "ORDER BY time DESC")
     public List<Information> listMyNotice(@Param("zone") int zone, @Param("building") int building, @Param("room") int room);
 
-    // 获取维修列表
+    // 获取维修列表 以个人为单位
+//    @Select("SELECT repair.id, name, content, time, repair.telephone, picture, status " +
+//            "FROM student, repair " +
+//            "WHERE repair.s_id=#{id} and repair.s_id=student.id " +
+//            "ORDER BY time DESC")
+//    public List<Repair> listRepair(@Param("id") int id);
+
+    // 获取维修列表 以宿舍为单位
     @Select("SELECT repair.id, name, content, time, repair.telephone, picture, status " +
             "FROM student, repair " +
-            "WHERE repair.s_id=#{id} and repair.s_id=student.id " +
+            "WHERE repair.d_id=#{id} and repair.s_id=student.id " +
             "ORDER BY time DESC")
     public List<Repair> listRepair(@Param("id") int id);
 
