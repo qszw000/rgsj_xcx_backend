@@ -39,4 +39,14 @@ public class GlobalExceptionHandler {
         result.put("data", null);
         return result;
     }
+
+    @ExceptionHandler(ParameterIllegalException.class)
+    private Map<String, Object> parameterIllegalExceptionHandle(ParameterIllegalException px) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", false);
+        result.put("code", -1007);
+        result.put("errMsg", px.getErrMsg());
+        result.put("data", null);
+        return result;
+    }
 }

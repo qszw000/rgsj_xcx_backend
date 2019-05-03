@@ -1,10 +1,12 @@
 package cn.hsy.echo.service;
 
 import cn.hsy.echo.dao.UserDao;
+import cn.hsy.echo.exception.ParameterIllegalException;
 import cn.hsy.echo.exception.TokenExpireException;
 import cn.hsy.echo.pojo.*;
+import cn.hsy.echo.util.AccountValidatorUtil;
 import cn.hsy.echo.util.Token;
-import cn.hsy.echo.util.WeixinApi;
+import cn.hsy.echo.util.WeChatApi;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +20,21 @@ import java.util.*;
 public class WechatService {
     private final UserDao userDao;
     private final Token tokenBuild;
-    private final WeixinApi weixinApi;
+    private final WeChatApi weChatApi;
+    private final AccountValidatorUtil accountValidatorUtil;
 
     @Autowired
-    public WechatService(UserDao userDao, Token tokenBuild, WeixinApi weixinApi) {
+    public WechatService(UserDao userDao, Token tokenBuild, WeChatApi weChatApi, AccountValidatorUtil accountValidatorUtil) {
         this.userDao = userDao;
         this.tokenBuild = tokenBuild;
-        this.weixinApi = weixinApi;
+        this.weChatApi = weChatApi;
+        this.accountValidatorUtil = accountValidatorUtil;
     }
 
     // 微信小程序登入，输入code获取用户唯一的open_id，通过open_id查找学生编号，如果返回为null，则需要绑定学号
     // 如果返回不为null，则返回学生信息
     public Map<String, Object> login(String code) {
-        String openId = weixinApi.getOpenId(code);
+        String openId = weChatApi.getOpenId(code);
         Integer id = userDao.getSId(openId);
         String token = tokenBuild.createToken(openId);
         Map<String, Object> result;
@@ -53,20 +57,29 @@ public class WechatService {
     public Map<String, Object> updateStudentOpenId(String token, int studentId) {
         Map<String, Object> result;
         if(tokenBuild.varify(token)) {
-            Integer flag = userDao.hasExistStudentId(studentId);
-            if (flag == null) {
-                result = errorMap(-1004, "学号不存在");
-            } else {
-                String openId = userDao.getOpenId(studentId);
-                if(openId == null) {
-                    openId = tokenBuild.getOpenId(token);
-                    System.out.println(openId);
-                    userDao.updateOpenId(openId, studentId);
-                    Student student = userDao.getStudent(openId);
-                    result = successMap(student);
+            if(accountValidatorUtil.isSutdentId(""+studentId)) {
+                Integer flag = userDao.hasExistStudentId(studentId);
+                if (flag == null) {
+                    result = errorMap(-1004, "学号不存在");
                 } else {
-                    result = errorMap(-1003, "学号已被绑定过");
+                    String openId = userDao.getOpenId(studentId);
+                    if(openId == null) {
+                        openId = tokenBuild.getOpenId(token);
+                        Integer sId = userDao.getSId(openId);
+                        if(sId == null) {
+                            userDao.updateOpenId(openId, studentId);
+                            Student student = userDao.getStudent(openId);
+                            result = successMap(student);
+                        } else {
+                            result = errorMap(-1006, "该账号已绑定过");
+                        }
+                    } else {
+                        result = errorMap(-1003, "学号已被绑定过");
+                    }
                 }
+            }
+            else {
+                throw new ParameterIllegalException("学号不合法");
             }
         } else {
             throw new TokenExpireException();
@@ -282,6 +295,10 @@ public class WechatService {
             String telephone = (String) info.get("telephone");
             if("".equals(telephone)) {
                 telephone = student.getTelephone();
+            } else {
+                if(!accountValidatorUtil.isTelephone(telephone)) {
+                    telephone = student.getTelephone();
+                }
             }
             String content = (String) info.get("content");
             String picture = null;
@@ -312,6 +329,10 @@ public class WechatService {
             String telephone = (String) info.get("telephone");
             if("".equals(telephone)) {
                 telephone = student.getTelephone();
+            } else {
+                if(!accountValidatorUtil.isTelephone(telephone)) {
+                    telephone = student.getTelephone();
+                }
             }
             String content = (String) info.get("content");
             String picture = null;

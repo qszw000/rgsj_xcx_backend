@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class WeixinApi {
+public class WeChatApi {
     private static final String APPID = "wx72cd08754362b281";
     private static final String APPSECRET = "bc97f9cd99ff0c623a33a6e1c7bd034a";
 

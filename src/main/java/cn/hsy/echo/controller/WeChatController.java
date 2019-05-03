@@ -14,11 +14,11 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/xcx")
-public class WechatController {
+public class WeChatController {
     private final WechatService wechatService;
 
     @Autowired
-    public WechatController(WechatService wechatService) {
+    public WeChatController(WechatService wechatService) {
         this.wechatService = wechatService;
     }
 
