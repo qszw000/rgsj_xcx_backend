@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-public class AccountValidatorUtil {
+public class ParamValidUtil {
     public static final String REGEX_TELEPHONE = "^[1][3,4,5,7,8][0-9]{9}$";
 
     public static final String REGEX_STUDENT_ID = "\\d{9}$";

@@ -1,5 +1,6 @@
 package cn.hsy.echo.controller;
 
+import cn.hsy.echo.pojo.Result;
 import cn.hsy.echo.service.WeChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,41 +24,41 @@ public class WeChatController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody HashMap<String, Object> info) {
-        String code = (String)info.get("code");
+    public Result login(@RequestBody HashMap<String, Object> info) {
+        String code = (String) info.get("code");
         return weChatService.login(code);
     }
 
     @PostMapping("/bind")
-    public Map<String, Object> bind(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info){
-        int studentId = (int)info.get("studentID");
+    public Result bind(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
+        int studentId = (int) info.get("studentID");
         return weChatService.updateStudentOpenId(token, studentId);
 
     }
 
     @GetMapping("/getGlobalAnnouncement")
-    public Map<String, Object> getGlobalAnnouncement(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getGlobalAnnouncement(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listGlobalAnnouncement(token, pageNum, pageSize);
     }
 
     @GetMapping("/getZoneAnnouncement")
-    public Map<String, Object> getZoneAnnouncement(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getZoneAnnouncement(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listZoneAnnouncement(token, pageNum, pageSize);
     }
 
     @GetMapping("/getMyNotice")
-    public Map<String, Object> getMyNotice(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getMyNotice(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listMyNotice(token, pageNum, pageSize);
     }
 
     @PostMapping("/submitFormID")
-    public Map<String, Object> submitFormId(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
+    public Result submitFormId(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
         String formId = (String) info.get("formID");
         return weChatService.insertFormId(token, formId);
     }
 
     @GetMapping("/getHistoryFee")
-    public Map<String, Object> getHistoryFee(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getHistoryFee(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listHistoryFee(token, pageNum, pageSize);
     }
 
@@ -67,55 +68,55 @@ public class WeChatController {
 //    }
 
     @PostMapping("/pay")
-    public Map<String, Object> pay(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
+    public Result pay(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
         int feeId = (int) info.get("feeID");
         return weChatService.updateFeeStatus(token, feeId);
     }
 
     @GetMapping("/getRepair")
-    public Map<String, Object> getRepair(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getRepair(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listRepair(token, pageNum, pageSize);
     }
 
     @GetMapping("/getComplaint")
-    public Map<String, Object> getComplaint(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getComplaint(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listComplaint(token, pageNum, pageSize);
     }
 
     @GetMapping("/getQuestionnaireList")
-    public Map<String, Object> getQuestionnaireList(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
+    public Result getQuestionnaireList(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listQuestionnaire(token, pageNum, pageSize);
     }
 
     @GetMapping("/getQuestionnaireDetail")
-    public Map<String, Object> getQuestionnaireDetail(@RequestHeader("token") String token, @RequestParam("questionID") int id) {
-        return  weChatService.getQuestionnaireDetail(token, id);
+    public Result getQuestionnaireDetail(@RequestHeader("token") String token, @RequestParam("questionID") int id) {
+        return weChatService.getQuestionnaireDetail(token, id);
     }
 
     @PostMapping("/getAnswer")
-    public Map<String, Object> getAnswer(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
+    public Result getAnswer(@RequestHeader("token") String token, @RequestBody HashMap<String, Object> info) {
         List<Integer> optionIdList = (List<Integer>) info.get("optionIDs");
         return weChatService.updateOptionSelectNumber(token, optionIdList);
     }
 
     @PostMapping("/repairReport")
-    public Map<String, Object>  repairReport(@RequestHeader String token, @RequestBody HashMap<String, Object> info) {
+    public Result repairReport(@RequestHeader String token, @RequestBody HashMap<String, Object> info) {
         return weChatService.insertRepair(token, info);
     }
 
     @PostMapping("/repairReportWithPicture")
-    public Map<String, Object> repaireReportWithPicture(@RequestHeader String token, HttpServletRequest request) {
+    public Result repaireReportWithPicture(@RequestHeader String token, HttpServletRequest request) {
         Map<String, Object> info = getInfo(request);
         return weChatService.insertRepair(token, info);
     }
 
     @PostMapping("/complaint")
-    public Map<String, Object>  complaint(@RequestHeader String token, @RequestBody HashMap<String, Object> info) {
+    public Result complaint(@RequestHeader String token, @RequestBody HashMap<String, Object> info) {
         return weChatService.insertComplaint(token, info);
     }
 
     @PostMapping("/complaintWithPicture")
-    public Map<String, Object> complaintWithPicture(@RequestHeader String token, HttpServletRequest request) {
+    public Result complaintWithPicture(@RequestHeader String token, HttpServletRequest request) {
         Map<String, Object> info = getInfo(request);
         return weChatService.insertComplaint(token, info);
     }

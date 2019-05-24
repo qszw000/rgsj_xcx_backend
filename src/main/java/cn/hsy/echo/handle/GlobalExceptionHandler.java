@@ -1,5 +1,8 @@
-package cn.hsy.echo.exception;
+package cn.hsy.echo.handle;
 
+import cn.hsy.echo.exception.CodeErrorException;
+import cn.hsy.echo.exception.ParameterIllegalException;
+import cn.hsy.echo.exception.TokenExpireException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -12,14 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class Token {
+public class TokenUtil {
     private static final String TOKEN_SECRET = "echo";
+
     private static final long EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3; //token过期时间3天
 
+    public TokenUtil() {
+    }
 
-    public Token() { }
-
-    public String createToken(String openId) {
+    public static String createToken(String openId) {
         //过期时间
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         //秘钥级加密算法
@@ -36,7 +37,7 @@ public class Token {
                 .sign(algorithm);
     }
 
-    public boolean varify(String token) {
+    public static boolean varify(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
@@ -47,7 +48,7 @@ public class Token {
         }
     }
 
-    public String getOpenId(String token) {
+    public static String getOpenId(String token) {
         DecodedJWT jwt = JWT.decode(token);
         return jwt.getClaim("openId").asString();
     }

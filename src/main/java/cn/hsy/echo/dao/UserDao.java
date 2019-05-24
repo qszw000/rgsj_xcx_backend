@@ -12,11 +12,11 @@ import java.util.List;
 public interface UserDao {
     // 通过openId找到学生编号
     @Select("SELECT id FROM student WHERE open_id=#{openId}")
-    public Integer getSId(@Param("openId")String openId);
+    public Integer getSId(@Param("openId") String openId);
 
     // 通过学生学号查找openId
     @Select("SELECT open_id FROM student WHERE student_id=#{studentId}")
-    public String getOpenId(@Param("studentId")int studentId);
+    public String getOpenId(@Param("studentId") int studentId);
 
     // 判断学号在不在
     @Select("SELECT 1 FROM student WHERE student_id=#{studentId}")

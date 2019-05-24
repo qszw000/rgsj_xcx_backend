@@ -15,11 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class WeChatApi {
+public class WeChatUtil {
     private static final String APPID = "wx72cd08754362b281";
+
     private static final String APPSECRET = "bc97f9cd99ff0c623a33a6e1c7bd034a";
 
-    public String getOpenId(String code) {
+    public static String getOpenId(String code) {
         StringBuffer url = new StringBuffer("https://api.weixin.qq.com/sns/jscode2session?appid=")
                 .append(APPID).append("&secret=").append(APPSECRET).append("&js_code=").append(code).append("&grant_type=authorization_code");
         String result = getResult(url.toString());
@@ -32,7 +33,7 @@ public class WeChatApi {
     }
 
     private static String getResult(String url) {
-        String result="";
+        String result = "";
         BufferedReader bufferedReader = null;
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -45,20 +46,20 @@ public class WeChatApi {
             inputStreamReader = new InputStreamReader(inputStream);
             bufferedReader = new BufferedReader(inputStreamReader);
             String line;
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 result += line;
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(bufferedReader != null) {
+                if (bufferedReader != null) {
                     bufferedReader.close();
                 }
-                if(inputStream != null) {
+                if (inputStream != null) {
                     inputStream.close();
                 }
-                if(inputStreamReader != null) {
+                if (inputStreamReader != null) {
                     inputStreamReader.close();
                 }
             } catch (Exception e) {
