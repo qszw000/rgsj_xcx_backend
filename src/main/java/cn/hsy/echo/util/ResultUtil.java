@@ -1,5 +1,6 @@
 package cn.hsy.echo.util;
 
+import cn.hsy.echo.enums.ErrorEnum;
 import cn.hsy.echo.pojo.Result;
 
 public class ResultUtil {
@@ -13,7 +14,7 @@ public class ResultUtil {
         return result;
     }
 
-    public static Result succcess() {
+    public static Result success() {
         return success(null);
     }
 
@@ -24,5 +25,9 @@ public class ResultUtil {
         result.setErrMsg(errMsg);
         result.setData(null);
         return result;
+    }
+
+    public static Result error(ErrorEnum errorEnum) {
+        return error(errorEnum.getCode(), errorEnum.getMessage());
     }
 }

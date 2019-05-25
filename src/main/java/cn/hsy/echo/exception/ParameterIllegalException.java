@@ -1,17 +1,20 @@
 package cn.hsy.echo.exception;
 
+import cn.hsy.echo.enums.ErrorEnum;
+import lombok.Data;
+import lombok.Getter;
+
+@Getter
 public class ParameterIllegalException extends RuntimeException {
-    private String errMsg;
+    private int code;
 
-    public ParameterIllegalException(String errMsg) {
-        this.errMsg = errMsg;
+    public ParameterIllegalException(String message, int code) {
+        super(message);
+        this.code = code;
     }
 
-    public String getErrMsg() {
-        return errMsg;
-    }
-
-    public void setErrMsg(String errMsg) {
-        this.errMsg = errMsg;
+    public ParameterIllegalException(ErrorEnum errorEnum) {
+        super(errorEnum.getMessage());
+        this.code = code;
     }
 }

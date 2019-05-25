@@ -17,4 +17,12 @@ public class ParamValidUtil {
     public static boolean isSutdentId(String studentId) {
         return Pattern.matches(REGEX_STUDENT_ID, studentId);
     }
+
+    public static boolean verifyPageNum(Integer pageNum) {
+        return pageNum > 0;
+    }
+
+    public static boolean verifyPageSize(Integer pageSize) {
+        return pageSize > 0;
+    }
 }

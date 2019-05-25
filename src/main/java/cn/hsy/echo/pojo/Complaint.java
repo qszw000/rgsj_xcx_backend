@@ -3,6 +3,7 @@ package cn.hsy.echo.pojo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Complaint {
@@ -12,11 +13,15 @@ public class Complaint {
 
     private String content;
 
-    private Date time;
+    private Date createTime;
+
+    private Date updateTime;
 
     private String telephone;
 
     private String picture;
+
+    private List<Reply> replyList;
 
     private int status;
 }

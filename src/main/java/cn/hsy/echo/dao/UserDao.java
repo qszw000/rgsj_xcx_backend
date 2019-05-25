@@ -68,18 +68,75 @@ public interface UserDao {
 //    public List<Repair> listRepair(@Param("id") int id);
 
     // 获取维修列表 以宿舍为单位
-    @Select("SELECT repair.id, name, content, time, repair.telephone, picture, status " +
+    @Select("SELECT repair.id, name, content, create_time, update_time, repair.telephone, picture, status " +
             "FROM student, repair " +
             "WHERE repair.d_id=#{id} and repair.s_id=student.id " +
-            "ORDER BY time DESC")
+            "ORDER BY update_time DESC")
     public List<Repair> listRepair(@Param("id") int id);
 
+    // 获取一条维修记录
+    @Select("SELECT repair.id, name, content, create_time, update_time, repair.telephone, picture, status " +
+            "FROM student, repair " +
+            "WHERE repair.id=#{id} and repair.s_id=student.id")
+    public Repair getRepair(@Param("id") int id);
+
+    // 获取维修回复列表
+    @Select("SELECT name, content, reply_time, reply_type " +
+            "FROM repair_reply, student " +
+            "WHERE repair_reply.repair_id=#{id} and repair_reply.reply_id=student.id and repair_reply.reply_type=1 " +
+            "ORDER BY reply_time DESC")
+    public List<Reply> listRepairApplicantReply(@Param("id") int id);
+
+    // 获取管理员回复列表
+    @Select("SELECT content, reply_time, reply_type " +
+            "FROM repair_reply " +
+            "WHERE repair_reply.repair_id=#{id} and repair_reply.reply_type=0 " +
+            "ORDER BY reply_time DESC")
+    public List<Reply> listRepairAdminReply(@Param("id") int id);
+
+    // 更新维修时间
+    @Update("UPDATE repair SET update_time=now() WHERE id=#{id}")
+    public void updateRepairTime(@Param("id") int id);
+
+    // 回复维修
+    @Insert("INSERT INTO repair_reply (reply_id, content, reply_type, reply_time, repair_id) VALUES (#{sId}, #{content}, 1, now(), #{id})")
+    public void insertRepairReply(@Param("sId") int sId, @Param("content") String content, @Param("id") int id);
+
     //获取投诉列表
-    @Select("SELECT complaint.id, name, content, time, complaint.telephone, picture, status " +
+    @Select("SELECT complaint.id, name, content, create_time, update_time, complaint.telephone, picture, status " +
             "FROM student, complaint " +
             "WHERE complaint.s_id=#{id} and complaint.s_id=student.id " +
-            "ORDER BY time DESC")
+            "ORDER BY update_time DESC")
     public List<Complaint> listComplaint(@Param("id") int id);
+
+    // 获取一个投诉信息
+    @Select("SELECT complaint.id, name, content, create_time, update_time, complaint.telephone, picture, status " +
+            "FROM student, complaint " +
+            "WHERE complaint.id=#{id} and complaint.s_id=student.id")
+    public Complaint getComplaint(@Param("id") int id);
+
+    // 获取投诉回复列表
+    @Select("SELECT name, content, reply_time, reply_type " +
+            "FROM complaint_reply, student " +
+            "WHERE complaint_reply.complaint_id=#{id} and complaint_reply.reply_id = student.id and complaint_reply.reply_type=1 " +
+            "ORDER BY reply_time DESC")
+    public List<Reply> listComplaintComplainantReply(@Param("id") int id);
+
+    // 获取管理员回复列表
+    @Select("SELECT content, reply_time, reply_type " +
+            "FROM complaint_reply " +
+            "WHERE complaint_reply.complaint_id=#{id} and complaint_reply.reply_type=0 " +
+            "ORDER BY reply_time DESC")
+    public List<Reply> listComplaintAdminReply(@Param("id") int id);
+
+    // 更新维修时间
+    @Update("UPDATE complaint SET update_time=now() WHERE id=#{id}")
+    public void updateComplaintTime(@Param("id") int id);
+
+    // 回复维修
+    @Insert("INSERT INTO complaint_reply (reply_id, content, reply_type, reply_time, complaint_id) VALUES (#{sId}, #{content}, 1, now(), #{id})")
+    public void insertComplaintReply(@Param("sId") int sId, @Param("content") String content, @Param("id") int id);
+
 
     // 添加form_id
     @Insert("INSERT INTO push (s_id, form_id) VALUES (#{id}, #{formId})")
@@ -115,10 +172,10 @@ public interface UserDao {
     public void updateOptionSelectNumber(@Param("id") int id);
 
     // 添加报修记录
-    @Insert("INSERT INTO repair (d_id, s_id, telephone, content, picture, status, time) VALUES (#{dId}, #{sId}, #{telephone}, #{content}, #{picture}, 0, now())")
+    @Insert("INSERT INTO repair (d_id, s_id, telephone, content, picture, status, create_time, update_time) VALUES (#{dId}, #{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
     public void insertRepair(@Param("dId") int dId, @Param("sId") int sId, @Param("telephone") String telephone, @Param("content") String content, @Param("picture") String picture);
 
     // 添加投诉记录
-    @Insert("INSERT INTO complaint (s_id, telephone, content, picture, status, time) VALUES (#{sId}, #{telephone}, #{content}, #{picture}, 0, now())")
+    @Insert("INSERT INTO complaint (s_id, telephone, content, picture, status, create_time, update_time) VALUES (#{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
     public void insertComplaint(@Param("sId") int sId, @Param("telephone") String telephone, @Param("content") String content, @Param("picture") String picture);
 }

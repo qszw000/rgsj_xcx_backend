@@ -16,7 +16,7 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/api/xcx")
 public class WeChatController {
-    private final WeChatService weChatService;
+    private WeChatService weChatService;
 
     @Autowired
     public WeChatController(WeChatService weChatService) {
@@ -78,9 +78,29 @@ public class WeChatController {
         return weChatService.listRepair(token, pageNum, pageSize);
     }
 
+    @GetMapping("/getRepairReply")
+    public Result getRepairReply(@RequestHeader("token") String token, @RequestParam("repairID") int id) {
+        return weChatService.getRepairReply(token, id);
+    }
+
+    @PostMapping("/replyRepair")
+    public Result replyRepair(@RequestHeader("token") String token, @RequestBody Map<String, Object> info) {
+        return weChatService.replyRepair(token, info);
+    }
+
     @GetMapping("/getComplaint")
     public Result getComplaint(@RequestHeader("token") String token, @RequestParam("page") int pageNum, @RequestParam("count") int pageSize) {
         return weChatService.listComplaint(token, pageNum, pageSize);
+    }
+
+    @PostMapping("/replyComplaint")
+    public Result replyComplaint(@RequestHeader("token") String token, @RequestBody Map<String, Object> info) {
+        return weChatService.replyComplaint(token, info);
+    }
+
+    @GetMapping("/getComplaintReply")
+    public Result getComplaintReply(@RequestHeader("token") String token, @RequestParam("complaintID") int id) {
+        return weChatService.getComplaintReply(token, id);
     }
 
     @GetMapping("/getQuestionnaireList")
@@ -105,7 +125,7 @@ public class WeChatController {
     }
 
     @PostMapping("/repairReportWithPicture")
-    public Result repaireReportWithPicture(@RequestHeader String token, HttpServletRequest request) {
+    public Result repairReportWithPicture(@RequestHeader String token, HttpServletRequest request) {
         Map<String, Object> info = getInfo(request);
         return weChatService.insertRepair(token, info);
     }

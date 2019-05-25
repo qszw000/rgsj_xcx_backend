@@ -37,7 +37,7 @@ public class TokenUtil {
                 .sign(algorithm);
     }
 
-    public static boolean varify(String token) {
+    public static boolean verify(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
