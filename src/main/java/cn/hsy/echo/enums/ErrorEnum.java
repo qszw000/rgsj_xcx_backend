@@ -29,7 +29,9 @@ public enum ErrorEnum {
 
     COMPLAINT_ID_ILLEGAL(-1012, "投诉记录中的学生编号与学生信息不相同"),
 
-    QUESTIONNAIRE_ID_ILLEGAL(-1003, "问卷发布对象与学生所在区不相同"),
+    QUESTIONNAIRE_ID_ILLEGAL(-1013, "问卷发布对象与学生所在区不相同"),
+
+    FEE_ID_ILLEGAL(-1014, "水电信息与学生宿舍不相同"),
     ;
 
     private int code;

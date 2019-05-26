@@ -146,6 +146,10 @@ public interface UserDao {
     @Select("SELECT * FROM fee WHERE d_id=#{id} ORDER BY end_time DESC")
     public List<Fee> listHistoryFee(@Param("id") int id);
 
+    // 获取水电详情
+    @Select("SELECT * FROM fee WHERE id=#{id}")
+    public Fee getFeeDetail(@Param("id") int id);
+
 
     // 修改水电状态
     @Update("UPDATE fee SET status=1 WHERE id=#{id}")

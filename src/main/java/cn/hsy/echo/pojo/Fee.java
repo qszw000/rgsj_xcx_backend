@@ -1,5 +1,6 @@
 package cn.hsy.echo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -7,6 +8,9 @@ import java.util.Date;
 @Data
 public class Fee {
     private int id;
+
+    @JsonIgnore
+    private int dId;
 
     private float lastMonthQuantity;
 

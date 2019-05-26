@@ -133,6 +133,13 @@ public class WeChatService {
 
     // 修改缴费记录
     public Result updateFeeStatus(String token, int feeId) {
+        String openId = TokenUtil.getOpenId(token);
+        Integer sId = userDao.getSId(openId);
+        Integer dId = userDao.getDid(sId);
+        Fee fee = userDao.getFeeDetail(feeId);
+        if (fee.getDId() != dId) {
+            throw new ParameterIllegalException(ErrorEnum.FEE_ID_ILLEGAL);
+        }
         userDao.updateFeeStatus(feeId);
         return ResultUtil.success();
     }
