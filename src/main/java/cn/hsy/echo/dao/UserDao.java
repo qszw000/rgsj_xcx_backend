@@ -68,14 +68,14 @@ public interface UserDao {
 //    public List<Repair> listRepair(@Param("id") int id);
 
     // 获取维修列表 以宿舍为单位
-    @Select("SELECT repair.id, name, content, create_time, update_time, repair.telephone, picture, status " +
+    @Select("SELECT repair.id, name, content, time, update_time, repair.telephone, picture, status " +
             "FROM student, repair " +
             "WHERE repair.d_id=#{id} and repair.s_id=student.id " +
             "ORDER BY update_time DESC")
     public List<Repair> listRepair(@Param("id") int id);
 
     // 获取一条维修记录
-    @Select("SELECT repair.id, name, content, create_time, update_time, repair.telephone, picture, status " +
+    @Select("SELECT repair.id, d_id, name, content, time, update_time, repair.telephone, picture, status " +
             "FROM student, repair " +
             "WHERE repair.id=#{id} and repair.s_id=student.id")
     public Repair getRepair(@Param("id") int id);
@@ -103,14 +103,14 @@ public interface UserDao {
     public void insertRepairReply(@Param("sId") int sId, @Param("content") String content, @Param("id") int id);
 
     //获取投诉列表
-    @Select("SELECT complaint.id, name, content, create_time, update_time, complaint.telephone, picture, status " +
+    @Select("SELECT complaint.id, name, content, time, update_time, complaint.telephone, picture, status " +
             "FROM student, complaint " +
             "WHERE complaint.s_id=#{id} and complaint.s_id=student.id " +
             "ORDER BY update_time DESC")
     public List<Complaint> listComplaint(@Param("id") int id);
 
     // 获取一个投诉信息
-    @Select("SELECT complaint.id, name, content, create_time, update_time, complaint.telephone, picture, status " +
+    @Select("SELECT complaint.id, s_id, name, content, time, update_time, complaint.telephone, picture, status " +
             "FROM student, complaint " +
             "WHERE complaint.id=#{id} and complaint.s_id=student.id")
     public Complaint getComplaint(@Param("id") int id);

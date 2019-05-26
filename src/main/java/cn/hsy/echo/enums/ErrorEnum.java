@@ -24,6 +24,12 @@ public enum ErrorEnum {
     STUDENT_ID_NOT_EXIT(-1009, "学号不存在"),
 
     OPENID_IS_BANNED(-1010, "openId已被绑定"),
+
+    REPAIR_ID_ILLEGAL(-1011, "报修记录中的宿舍编号与学生宿舍不相同"),
+
+    COMPLAINT_ID_ILLEGAL(-1012, "投诉记录中的学生编号与学生信息不相同"),
+
+    QUESTIONNAIRE_ID_ILLEGAL(-1003, "问卷发布对象与学生所在区不相同"),
     ;
 
     private int code;

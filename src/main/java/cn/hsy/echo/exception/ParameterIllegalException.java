@@ -15,6 +15,6 @@ public class ParameterIllegalException extends RuntimeException {
 
     public ParameterIllegalException(ErrorEnum errorEnum) {
         super(errorEnum.getMessage());
-        this.code = code;
+        this.code = errorEnum.getCode();
     }
 }

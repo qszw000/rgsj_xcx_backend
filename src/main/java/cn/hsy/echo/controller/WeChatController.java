@@ -16,12 +16,8 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/api/xcx")
 public class WeChatController {
-    private WeChatService weChatService;
-
     @Autowired
-    public WeChatController(WeChatService weChatService) {
-        this.weChatService = weChatService;
-    }
+    private WeChatService weChatService;
 
     @PostMapping("/login")
     public Result login(@RequestBody HashMap<String, Object> info) {

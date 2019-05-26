@@ -21,7 +21,7 @@
     </resultMap>
 
     <select id="getQuestionnaire" parameterType="int" resultMap="QuestionnaireMap">
-        SELECT questionnaire.id, title, start_time, end_time, name
+        SELECT questionnaire.id, title, start_time, end_time, name, zone
         FROM questionnaire, worker
         WHERE questionnaire.id=#{id} AND questionnaire.w_id=worker.id;
     </select>

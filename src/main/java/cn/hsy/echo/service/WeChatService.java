@@ -8,6 +8,7 @@ import cn.hsy.echo.pojo.*;
 import cn.hsy.echo.util.ParamValidUtil;
 import cn.hsy.echo.util.ResultUtil;
 import cn.hsy.echo.util.TokenUtil;
+import cn.hsy.echo.util.WeChatUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jdk.nashorn.internal.parser.Token;
@@ -28,8 +29,8 @@ public class WeChatService {
     // 微信小程序登入，输入code获取用户唯一的open_id，通过open_id查找学生编号，如果返回为null，则需要绑定学号
     // 如果返回不为null，则返回学生信息
     public Result login(String code) {
-//        String openId = WeChatUtil.getOpenId(code);
-        String openId = "oBPN75W0V9Ican6r4ebB_4VTr3GI";
+        String openId = WeChatUtil.getOpenId(code);
+//        String openId = "oBPN75W0V9Ican6r4ebB_4VTr3GI";
         Integer id = userDao.getSId(openId);
         String token = TokenUtil.createToken(openId);
         Map<String, Object> data = new HashMap<>();
@@ -67,29 +68,6 @@ public class WeChatService {
         userDao.updateOpenId(openId, studentId);
         Student student = userDao.getStudent(openId);
         return ResultUtil.success(student);
-//        if (ParamValidUtil.isSutdentId("" + studentId)) {
-//            Integer flag = userDao.hasExistStudentId(studentId);
-//            if (flag == null) {
-//                return ResultUtil.error(-1004, "学号不存在");
-//            } else {
-//                String openId = userDao.getOpenId(studentId);
-//                if (openId == null) {
-//                    openId = TokenUtil.getOpenId(token);
-//                    Integer sId = userDao.getSId(openId);
-//                    if (sId == null) {
-//                        userDao.updateOpenId(openId, studentId);
-//                        Student student = userDao.getStudent(openId);
-//                        return ResultUtil.success(student);
-//                    } else {
-//                        return ResultUtil.error(-1006, "该账号已绑定过");
-//                    }
-//                } else {
-//                    return ResultUtil.error(-1003, "学号已被绑定过");
-//                }
-//            }
-//        } else {
-//            throw new ParameterIllegalException("学号不合法", 11);
-//        }
     }
 
     // 获取首页信息
@@ -175,7 +153,13 @@ public class WeChatService {
 
     // 获取维修回复
     public Result getRepairReply(String token, int id) {
+        String openId = TokenUtil.getOpenId(token);
+        Integer sId = userDao.getSId(openId);
+        Integer dId = userDao.getDid(sId);
         Repair repair = userDao.getRepair(id);
+        if (repair.getDId() != dId) {
+            throw new ParameterIllegalException(ErrorEnum.REPAIR_ID_ILLEGAL);
+        }
         List<Reply> applicantReply = userDao.listRepairApplicantReply(id);
         List<Reply> adminReply = userDao.listRepairAdminReply(id);
         List<Reply> replyList = new ArrayList<>();
@@ -193,6 +177,11 @@ public class WeChatService {
         String content = (String) info.get("content");
         String openId = TokenUtil.getOpenId(token);
         Integer sId = userDao.getSId(openId);
+        Integer dId = userDao.getDid(sId);
+        Repair repair = userDao.getRepair(id);
+        if (repair.getDId() != dId) {
+            throw new ParameterIllegalException(ErrorEnum.REPAIR_ID_ILLEGAL);
+        }
         userDao.updateRepairTime(id);
         userDao.insertRepairReply(sId, content, id);
         return ResultUtil.success();
@@ -213,7 +202,12 @@ public class WeChatService {
 
     // 获取投诉回复
     public Result getComplaintReply(String token, int id) {
+        String openId = TokenUtil.getOpenId(token);
+        Integer sId = userDao.getSId(openId);
         Complaint complaint = userDao.getComplaint(id);
+        if (complaint.getSId() != sId) {
+            throw new ParameterIllegalException(ErrorEnum.COMPLAINT_ID_ILLEGAL);
+        }
         List<Reply> complainantReply = userDao.listComplaintComplainantReply(id);
         List<Reply> adminReply = userDao.listComplaintAdminReply(id);
         List<Reply> replyList = new ArrayList<>();
@@ -231,6 +225,10 @@ public class WeChatService {
         String content = (String) info.get("content");
         String openId = TokenUtil.getOpenId(token);
         Integer sId = userDao.getSId(openId);
+        Complaint complaint = userDao.getComplaint(id);
+        if (complaint.getSId() != sId) {
+            throw new ParameterIllegalException(ErrorEnum.COMPLAINT_ID_ILLEGAL);
+        }
         userDao.updateComplaintTime(id);
         userDao.insertComplaintReply(sId, content, id);
         return ResultUtil.success();
@@ -252,7 +250,12 @@ public class WeChatService {
 
     // 获取问卷详细信息
     public Result getQuestionnaireDetail(String token, int id) {
+        String openId = TokenUtil.getOpenId(token);
+        Student student = userDao.getStudent(openId);
         Questionnaire questionnaire = userDao.getQuestionnaire(id);
+        if (questionnaire.getZone() != 0 && student.getDormitory().getZone() != questionnaire.getZone()) {
+            throw new ParameterIllegalException(ErrorEnum.QUESTIONNAIRE_ID_ILLEGAL);
+        }
         return ResultUtil.success(questionnaire);
     }
 
