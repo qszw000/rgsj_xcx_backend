@@ -32,6 +32,5 @@ public class ParamVerifyAspect {
         if (!ParamValidUtil.verifyPageSize(pageSize)) {
             throw new ParameterIllegalException(ErrorEnum.PAGE_SIZE_ILLEGAL);
         }
-        log.info("pageNum={}, pageSize={}",pageNum , pageSize);
     }
 }

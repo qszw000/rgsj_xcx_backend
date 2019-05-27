@@ -180,7 +180,7 @@ public class WeChatService {
     // 维修回复
     @Transactional
     public Result replyRepair(String token, Map<String, Object> info) {
-        int id = (Integer) info.get("id");
+        int id = (Integer) info.get("repairID");
         String content = (String) info.get("content");
         String openId = TokenUtil.getOpenId(token);
         Integer sId = userDao.getSId(openId);
@@ -228,7 +228,7 @@ public class WeChatService {
     // 维修回复
     @Transactional
     public Result replyComplaint(String token, Map<String, Object> info) {
-        int id = (Integer) info.get("id");
+        int id = (Integer) info.get("complaintID");
         String content = (String) info.get("content");
         String openId = TokenUtil.getOpenId(token);
         Integer sId = userDao.getSId(openId);

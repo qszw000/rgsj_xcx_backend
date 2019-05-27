@@ -1,12 +1,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/echo
-    username: root
-    password: 123456
-#    url: jdbc:mysql://139.199.58.232:3306/echo
-#    username: echo
-#    password: echo1916
+#    url: jdbc:mysql://127.0.0.1:3306/echo
+#    username: root
+#    password: 123456
+    url: jdbc:mysql://139.199.58.232:3306/echo
+    username: echo
+    password: echo1916
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
