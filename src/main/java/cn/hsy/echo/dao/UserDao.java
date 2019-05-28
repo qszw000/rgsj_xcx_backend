@@ -176,10 +176,10 @@ public interface UserDao {
     public void updateOptionSelectNumber(@Param("id") int id);
 
     // 添加报修记录
-    @Insert("INSERT INTO repair (d_id, s_id, telephone, content, picture, status, create_time, update_time) VALUES (#{dId}, #{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
+    @Insert("INSERT INTO repair (d_id, s_id, telephone, content, picture, status, time, update_time) VALUES (#{dId}, #{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
     public void insertRepair(@Param("dId") int dId, @Param("sId") int sId, @Param("telephone") String telephone, @Param("content") String content, @Param("picture") String picture);
 
     // 添加投诉记录
-    @Insert("INSERT INTO complaint (s_id, telephone, content, picture, status, create_time, update_time) VALUES (#{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
+    @Insert("INSERT INTO complaint (s_id, telephone, content, picture, status, time, update_time) VALUES (#{sId}, #{telephone}, #{content}, #{picture}, 0, now(), now())")
     public void insertComplaint(@Param("sId") int sId, @Param("telephone") String telephone, @Param("content") String content, @Param("picture") String picture);
 }
