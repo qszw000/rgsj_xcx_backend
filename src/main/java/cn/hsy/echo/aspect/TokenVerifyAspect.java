@@ -4,16 +4,13 @@ import cn.hsy.echo.enums.ErrorEnum;
 import cn.hsy.echo.exception.TokenException;
 import cn.hsy.echo.util.AspectUtil;
 import cn.hsy.echo.util.TokenUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Aspect
@@ -21,7 +18,8 @@ import java.util.Map;
 public class TokenVerifyAspect {
 
     @Pointcut("execution(public * cn.hsy.echo.controller.WeChatController.*(..)) && !execution(public * cn.hsy.echo.controller.WeChatController.login(..))")
-    public void verify() {}
+    public void verify() {
+    }
 
     @Before("verify()")
     public void doVerify(JoinPoint joinPoint) {

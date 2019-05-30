@@ -19,7 +19,8 @@ import java.util.Map;
 public class ParamVerifyAspect {
 
     @Pointcut("@annotation(cn.hsy.echo.aspect.annotation.VerifyPageParam))")
-    public void verifyPageParam() {}
+    public void verifyPageParam() {
+    }
 
     @Before("verifyPageParam()")
     public void doVerifyPageParam(JoinPoint joinPoint) {

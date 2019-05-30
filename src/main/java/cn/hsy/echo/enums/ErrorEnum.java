@@ -1,6 +1,5 @@
 package cn.hsy.echo.enums;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
@@ -31,8 +30,7 @@ public enum ErrorEnum {
 
     QUESTIONNAIRE_ID_ILLEGAL(-1013, "问卷发布对象与学生所在区不相同"),
 
-    FEE_ID_ILLEGAL(-1014, "水电信息与学生宿舍不相同"),
-    ;
+    FEE_ID_ILLEGAL(-1014, "水电信息与学生宿舍不相同"),;
 
     private int code;
 

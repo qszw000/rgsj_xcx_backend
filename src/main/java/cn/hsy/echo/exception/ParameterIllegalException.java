@@ -1,7 +1,6 @@
 package cn.hsy.echo.exception;
 
 import cn.hsy.echo.enums.ErrorEnum;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
